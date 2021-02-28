@@ -8,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.coopeuch.tareas.utils.Constantes;
@@ -40,5 +42,22 @@ public class TareaDTO extends BaseDTO{
 	@NotNull(message = Constantes.ERROR_CAMPO_REQUERIDO)
 	@Column(name = "vigente", nullable = false)
 	private Boolean vigente;
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj.getClass() == getClass()) {
+			final TareaDTO other = (TareaDTO) obj;
+			return new EqualsBuilder().append(this.identificador, other.identificador)
+					.append(this.descripcion, other.descripcion).build().booleanValue();
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(identificador).append(descripcion).build();
+	}
 	
 }

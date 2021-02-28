@@ -1,9 +1,6 @@
 import { combineReducers } from 'redux';
-
 /** Import de todas las Acciones */
 import { LOAD_DATA } from './redux.actions';
-
-import { tareaService } from '../core/services/tarea.service';
 
 /**Estado general de la App */
 let generalState = {

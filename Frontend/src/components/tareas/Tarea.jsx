@@ -1,11 +1,17 @@
+import {
+	faArrowLeft,
+	faEdit,
+	faPlus,
+	faSave,
+	faSync
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AvField, AvForm } from 'availity-reactstrap-validation';
+import AvRadio from 'availity-reactstrap-validation/lib/AvRadio';
+import AvRadioGroup from 'availity-reactstrap-validation/lib/AvRadioGroup';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { withRouter } from 'react-router-dom';
-import { tareaService } from '../../core/services/tarea.service';
-import store from '../../store/redux.store';
-import { dataState } from '../../store/redux.actions';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
 import {
 	Button,
 	FormGroup,
@@ -14,26 +20,21 @@ import {
 	ModalFooter,
 	ModalHeader
 } from 'reactstrap';
-import { CAMPO_INVALIDO, TAREA_LABELS } from './tareaUtils';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-	faArrowLeft,
-	faEdit,
-	faPlus,
-	faSave,
-	faSync
-} from '@fortawesome/free-solid-svg-icons';
-import AvRadioGroup from 'availity-reactstrap-validation/lib/AvRadioGroup';
-import AvRadio from 'availity-reactstrap-validation/lib/AvRadio';
-import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import { notificationError } from '../../core/services/notificacionService';
+import { tareaService } from '../../core/services/tarea.service';
+import { dataState } from '../../store/redux.actions';
+import store from '../../store/redux.store';
+import { CAMPO_INVALIDO, TAREA_LABELS } from './tareaUtils';
 
 let customSwal = withReactContent(Swal);
 
 const Tarea = props => {
 	const [tareasList, setTareasList] = useState(
 		store.getState().generalReducer.data
+			? store.getState().generalReducer.data
+			: []
 	);
 	const [esEdicion, setEsEdicion] = useState(false);
 	const [modalEdit, setModalEdit] = useState(false);
@@ -132,6 +133,7 @@ const Tarea = props => {
 	};
 
 	const handleChange = event => {
+		console.dir(event);
 		let value = event.target.value;
 		const name = event.target.name;
 		if (name === 'vigente') {
@@ -163,7 +165,7 @@ const Tarea = props => {
 	};
 
 	const fragmentModalEdit = (
-		<Modal isOpen={modalEdit} size='lg'>
+		<Modal id='modalEdit' isOpen={modalEdit} size='lg'>
 			<ModalHeader>
 				<FontAwesomeIcon icon={faEdit} />{' '}
 				{esEdicion ? 'Editar tarea' : 'Nueva tarea'}
@@ -184,6 +186,7 @@ const Tarea = props => {
 									</label>
 									<div className='col-10'>
 										<AvField
+											id='identificador'
 											name='identificador'
 											type='text'
 											errorMessage={TAREA_LABELS.IDENTIFICADOR + CAMPO_INVALIDO}
@@ -215,6 +218,7 @@ const Tarea = props => {
 								<div className='form-group row'>
 									<div className='col-12'>
 										<AvField
+											id='descripcion'
 											name='descripcion'
 											type='textarea'
 											errorMessage={TAREA_LABELS.DESCRIPCION + CAMPO_INVALIDO}
@@ -235,6 +239,7 @@ const Tarea = props => {
 									</label>
 									<div className='col-3'>
 										<input
+											id='fechaCreacion'
 											readOnly={true}
 											className='form-control'
 											type='text'
@@ -250,6 +255,7 @@ const Tarea = props => {
 									</label>
 									<div className='col-3'>
 										<input
+											id='horaCreacion'
 											readOnly={true}
 											className='form-control'
 											type='time'
@@ -266,6 +272,7 @@ const Tarea = props => {
 									<div className='col-3'>
 										<AvRadioGroup
 											inline
+											id='vigente'
 											name='vigente'
 											required
 											errorMessage={TAREA_LABELS.VIGENTE + CAMPO_INVALIDO}
@@ -288,12 +295,12 @@ const Tarea = props => {
 				</FormGroup>
 			</ModalBody>
 			<ModalFooter>
-				<Button color='secondary' onClick={toggle}>
+				<button id='cancelarBtn' className='btn btn-secondary' onClick={toggle}>
 					<FontAwesomeIcon icon={faArrowLeft} /> Cancelar
-				</Button>
-				<Button color='primary' form='tareaForm'>
+				</button>
+				<button id='guardarBtn' className='btn btn-primary' form='tareaForm'>
 					<FontAwesomeIcon icon={faSave} /> Guardar
-				</Button>
+				</button>
 			</ModalFooter>
 		</Modal>
 	);
@@ -306,6 +313,7 @@ const Tarea = props => {
 						<div className='p-1 flex bd-highlight'>
 							<div className='btn-group' role='group'>
 								<button
+									id='nuevoBtn'
 									style={{ marginRight: '2px' }}
 									className='btn-outline-primary rounded'
 									onClick={() => {
@@ -317,6 +325,7 @@ const Tarea = props => {
 									{' Nuevo'}
 								</button>
 								<button
+									id='actualizarlistBtn'
 									style={{ marginRight: '2px' }}
 									className='btn-outline-info rounded'
 									onClick={() => {
@@ -329,6 +338,7 @@ const Tarea = props => {
 									{' Actualizar listado'}
 								</button>
 								<button
+									id='guardarCambiosBtn'
 									style={{ marginRight: '2px' }}
 									className='btn-outline-primary rounded'
 									onClick={() => {
@@ -359,4 +369,4 @@ const Tarea = props => {
 	);
 };
 
-export default withRouter(Tarea);
+export default Tarea;

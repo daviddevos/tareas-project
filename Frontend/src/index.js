@@ -1,15 +1,15 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import Tarea from './components/tareas/Tarea';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import Routes from './core/routes/Routes';
 import store from './store/redux.store';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
 	<Provider store={store}>
-		<Routes />
+		<Tarea />
 	</Provider>,
 
 	document.getElementById('root')
